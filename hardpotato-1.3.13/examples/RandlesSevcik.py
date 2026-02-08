@@ -12,9 +12,9 @@ model = 'chi1205b'
 #model = 'emstatpico'
 
 # Path to the chi software, including extension .exe. Negletected by emstatpico
-path = 'C:/Users/oliverrz/Desktop/CHI/chi1205b_mini2/chi1205b.exe'
+path = r'C:\CHI_Data\chi6273e.exe'
 # Folder where to save the data, it needs to be created previously
-folder = 'C:/Users/oliverrz/Desktop/data'
+folder = r'C:\CHI_Data\GuoZhu'
 # Initialization:
 hp.potentiostat.Setup(model, path, folder)
 
@@ -30,7 +30,7 @@ sens = 1e-4     # A/V, current sensitivity
 header = 'CV'   # header for data file
 
 ##### Experiment:
-sr = np.array([0.02, 0.05, 0.1, 0.2])          # V/s, scan rate
+sr = np.array([0.2, 0.5])          # V/s, scan rate
 nsr = sr.size
 i = []
 for x in range(nsr):

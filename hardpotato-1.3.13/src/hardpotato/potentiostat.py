@@ -101,7 +101,7 @@ class Technique:
             # Write macro:
             self.writeToFile()
             # Run command:
-            print('Running CV')
+            print('Running')
             command = f'\"{path_lib}\"' + ' /runmacro:\"' + folder_save + '/' + self.fileName + '.mcr\"'
             subprocess.run(command)
             self.message(start=False)
