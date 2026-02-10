@@ -7,9 +7,9 @@ import softpotato as sp
 model = 'chi760e'
 #model = 'chi760e'
 # Path to the chi software, including extension .exe
-path = 'C:/Users/jrl/Desktop/CHI/chi760e/chi760e.exe'
-# Folder where to save the data, it needs to be created previously
-folder = 'C:/Users/jrl/echem/Data'
+path = r'C:\CHI1205B\chi1205b.exe' 
+folder = r'C:\coding\chi\data_test' # Update to your data folder
+
 # Initialization:
 hp.potentiostat.Setup(model, path, folder)
 

@@ -3,6 +3,36 @@ import numpy as np
 import matplotlib.pyplot as plt
 import softpotato as sp
 from scipy.optimize import curve_fit
+import os
+import pandas as pd
+df = pd.DataFrame()
+
+def load_data(file_path, mode, column_name):
+    global df
+    clean_data = []
+    rows = []
+
+    with open(file_path, "r") as file:
+        lines = file.readlines()
+
+    # 去除非數據行
+    for i in range(len(lines)):
+        if lines[i].strip() == 'Potential/V, Current/A':
+            clean_data = lines[i+2:]
+            break
+
+    if mode == 0:
+        for line in clean_data:
+            potential, current = line.strip().split(',')
+            rows.append([float(potential), float(current)])
+        df["Potential/V"] = [r[0] for r in rows]
+        df[column_name + " Current/A"] = [r[1] for r in rows]
+    else:
+        for line in clean_data:
+            potential, current = line.strip().split(',')
+            rows.append([float(potential), float(current)])
+        df[column_name + " Current/A"] = [r[1] for r in rows]
+
 
 ##### Setup
 # Select the potentiostat model to use:
@@ -15,6 +45,7 @@ model = 'chi1205b'
 path = r'C:\CHI_Data\chi6273e.exe'
 # Folder where to save the data, it needs to be created previously
 folder = r'C:\CHI_Data\GuoZhu'
+
 # Initialization:
 hp.potentiostat.Setup(model, path, folder)
 
@@ -42,10 +73,16 @@ for x in range(nsr):
     # load data to do the data analysis later
     data = hp.load_data.CV(fileName + '.txt', folder, model)
     i.append(data.i)
+    file_path = os.path.join(folder, fileName + ".txt")
+    mode = 0 if x == 0 else 1
+    colname = str(int(sr[x]*1000)) + "mVs"
+    load_data(file_path, mode, colname)
 i = np.array(i)
 i = i[:,:,0].T
 E = data.E
 
+excel_path = os.path.join(folder, "data.xlsx")
+df.to_excel(excel_path, index=False)
 
 ##### Data analysis
 # Estimation of D with Randles-Sevcik
@@ -97,3 +134,4 @@ plt.plot(E, i*1e6)
 plt.plot(wf.E, iSim*1e6, 'k--')
 plt.title('Experiment (-) vs Simulation (--)')
 sp.plotting.format(xlab='$E$ / V', ylab='$i$ / $\mu$A', legend=[0], show=1)
+
